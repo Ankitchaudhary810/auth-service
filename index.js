@@ -19,11 +19,15 @@ db.on("error", (err) => {
 })
 
 app.use(express.json());
-app.use(bodyparser.urlencoded({ extended: false })); 
+app.use(bodyparser.urlencoded({ extended: false }));
 
 
-app.use('/',authRouter);
+app.use('/', authRouter);
 
-app.listen(3000,() => {
-    console.log('app is running...', 3000);
+app.get("/", (req, res) => {
+  res.send("working..");
+})
+
+app.listen(4000, () => {
+  console.log('app is running...', 4000);
 })
