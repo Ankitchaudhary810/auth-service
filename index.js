@@ -1,14 +1,16 @@
 const express = require('express');
 const app = express();
 const bodyparser = require('body-parser')
-
+const cookieParser = require('cookie-parser')
+const cors = require('cors');
+require('dotenv').config()
 const mongoose = require('mongoose');
 
-const authRouter = require('../auth-service/routes/user')
+const authRouter = require('../auth-service/routes/user');
 
-const DATABASE_URI = "mongodb://iammortex07:iammortex07@ac-9itat9x-shard-00-00.48rxy4s.mongodb.net:27017,ac-9itat9x-shard-00-01.48rxy4s.mongodb.net:27017,ac-9itat9x-shard-00-02.48rxy4s.mongodb.net:27017/?ssl=true&replicaSet=atlas-gjde4q-shard-0&authSource=admin&retryWrites=true&w=majority&appName=auth-service"
 
-mongoose.connect(DATABASE_URI);
+
+mongoose.connect(process.env.DATABASE_URL);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('connected', () => {
@@ -18,7 +20,15 @@ db.on("error", (err) => {
   console.log("Mongoose default connection fail: " + err);
 })
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_ROOT_URI,
+    credentials: true
+  })
+)
+
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyparser.urlencoded({ extended: false }));
 
 
